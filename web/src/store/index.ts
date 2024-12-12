@@ -11,6 +11,7 @@ export interface StoreState {
   items: { name: StringField; metadata?: StringField; remove: boolean | null }[];
   characters: StringField[];
   groups: { name: StringField; grade: NumberField }[];
+  time: {start: StringField, end: StringField}[];
   maxDistance: NumberField;
   doorRate: NumberField;
   lockSound: StringField;
@@ -20,6 +21,7 @@ export interface StoreState {
   state: boolean | null;
   lockpick: boolean | null;
   hideUi: boolean | null;
+  permission: boolean | null;
   doors: boolean | null;
   holdOpen: boolean | null;
 }
@@ -35,8 +37,9 @@ interface StateSetters {
   setItems: (fn: (state: StoreState['items']) => StoreState['items']) => void;
   setCharacters: (fn: (state: StoreState['characters']) => StoreState['characters']) => void;
   setGroups: (fn: (state: StoreState['groups']) => StoreState['groups']) => void;
+  setTime: (fn: (state: StoreState['time']) => StoreState['time']) => void;
   setLockpickDifficulty: (fn: (state: StoreState['lockpickDifficulty']) => StoreState['lockpickDifficulty']) => void;
-  toggleCheckbox: (type: 'state' | 'doors' | 'auto' | 'lockpick' | 'hideUi' | 'holdOpen') => void;
+  toggleCheckbox: (type: 'state' | 'doors' | 'auto' | 'lockpick' | 'hideUi' | 'holdOpen' | 'permission') => void;
   setMaxDistance: (value: StoreState['maxDistance']) => void;
   setDoorRate: (value: StoreState['doorRate']) => void;
 }
@@ -48,6 +51,7 @@ export const useStore = create<StoreState>(() => ({
   items: [{ name: '', metadata: '', remove: false }],
   characters: [''],
   groups: [{ name: '', grade: undefined }],
+  time : [{start: '', end: ''}],
   lockpickDifficulty: [''],
   maxDistance: 0,
   doorRate: 0,
@@ -57,6 +61,7 @@ export const useStore = create<StoreState>(() => ({
   state: false,
   lockpick: false,
   hideUi: false,
+  permission:false,
   doors: false,
   holdOpen: false,
 }));
@@ -84,6 +89,10 @@ export const useSetters = create<StateSetters>((set: SetState<StateSetters>, get
   setGroups: (fn) =>
     useStore.setState(({ groups: groupFields }) => ({
       groups: fn(groupFields),
+    })),
+  setTime: (fn) =>
+    useStore.setState(({ time: timeFields }) => ({
+      time: fn(timeFields),
     })),
   setLockpickDifficulty: (fn) =>
     useStore.setState(({ lockpickDifficulty: difficultyFields }) => ({

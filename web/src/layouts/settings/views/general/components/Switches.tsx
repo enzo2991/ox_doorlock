@@ -9,6 +9,7 @@ const Switches: React.FC = () => {
   const automatic = useStore((state) => state.auto);
   const lockpick = useStore((state) => state.lockpick);
   const hideUi = useStore((state) => state.hideUi);
+  const permission = useStore((state) => state.permission);
   const holdOpen = useStore((state) => state.holdOpen);
 
   const toggleCheckbox = useSetters((setter) => setter.toggleCheckbox);
@@ -45,6 +46,12 @@ const Switches: React.FC = () => {
           infoCircle="Hides UI indicators for the targeting door"
           value={hideUi || false}
           toggle={() => toggleCheckbox('hideUi')}
+        />
+        <TooltipSwitch
+          label="Permissions Group"
+          infoCircle="Enables job permissions if a permissions system is used"
+          value={permission || false}
+          toggle={() => toggleCheckbox('permission')}
         />
         <TooltipSwitch
           label="Hold Open"
