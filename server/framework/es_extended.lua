@@ -63,3 +63,42 @@ function IsPlayerInGroup(player, filter)
         end
     end
 end
+
+local function hasPermission(permissionsList, permission)
+    for _, perm in ipairs(permissionsList) do
+        if perm == permission then
+            return true
+        end
+    end
+    return false
+end
+
+function IsPlayerInGroupAndPermission(player, filter, requiredPermission)
+    if type == 'string' then
+        if player.job.name == filter then
+            if hasPermission(player.job.grade_permissions, requiredPermission) then
+                return player.job.name, player.job.grade
+            end
+        end
+    else
+        local tabletype = table.type(filter)
+
+        if tabletype == 'hash' then
+            local grade = filter[player.job.name]
+
+            if grade and grade <= player.job.grade then
+                if hasPermission(player.job.grade_permissions, requiredPermission) then
+                    return player.job.name, player.job.grade
+                end
+            end
+        elseif tabletype == 'array' then
+            for i = 1, #filter do
+                if player.job.name == filter[i] then
+                    if hasPermission(player.job.grade_permissions, requiredPermission) then
+                        return player.job.name, player.job.grade
+                    end
+                end
+            end
+        end
+    end
+end

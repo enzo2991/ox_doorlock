@@ -197,6 +197,11 @@ function DoesPlayerHaveItem(player, items, removeItem)
 	end
 end
 
+function CheckTime(times)
+	print('CheckTime')
+	print(json.encode(times))
+end
+
 local function isAuthorised(playerId, door, lockpick)
 	if Config.PlayerAceAuthorised and IsPlayerAceAllowed(playerId, 'command.doorlock') then
 		return true
@@ -222,7 +227,11 @@ local function isAuthorised(playerId, door, lockpick)
 		end
 
 		if door.groups then
-			authorised = IsPlayerInGroup(player, door.groups) and true or nil
+			if not door.permission then
+				authorised = IsPlayerInGroup(player, door.groups) and true or nil
+			else
+				authorised = IsPlayerInGroupAndPermission(player, door.groups,'perso.OpenDoor') and true or nil
+			end
 		end
 
 		if not authorised and door.items then
@@ -231,6 +240,10 @@ local function isAuthorised(playerId, door, lockpick)
 
 		if authorised ~= nil and door.passcode then
 			authorised = door.passcode == lib.callback.await('ox_doorlock:inputPassCode', playerId)
+		end
+
+		if authorised ~= nil and door.time then
+			authorised = CheckTime(door.time) or nil
 		end
 	end
 
