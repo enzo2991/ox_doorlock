@@ -34,6 +34,7 @@ local function encodeData(door)
 		},
 		characters = door.characters,
 		groups = door.groups,
+		time = door.time,
 		heading = door.heading,
 		items = door.items,
 		lockpick = door.lockpick,
@@ -60,6 +61,7 @@ local function getDoor(door)
 		coords = door.coords,
 		characters = door.characters,
 		groups = door.groups,
+		time = door.time,
 		items = door.items,
 		maxDistance = door.maxDistance,
 	}
@@ -198,8 +200,29 @@ function DoesPlayerHaveItem(player, items, removeItem)
 end
 
 function CheckTime(times)
-	print('CheckTime')
-	print(json.encode(times))
+	local value = false
+
+	local currentHour = tonumber(os.date("%H"))
+    local currentMinute = tonumber(os.date("%M"))
+	local currentTime = currentHour * 60 + currentMinute
+
+	for _, timeRange in ipairs(times) do
+		local hourStart, minuteStart = timeRange.start:match("^(%d+):(%d+)")
+		local hourEnd, minuteEnd = timeRange["end"]:match("^(%d+):(%d+)")
+        hourStart = tonumber(hourStart)
+        minuteStart = tonumber(minuteStart)
+        hourEnd = tonumber(hourEnd)
+        minuteEnd = tonumber(minuteEnd)
+
+        local startTime = hourStart * 60 + minuteStart
+        local endTime = hourEnd * 60 + minuteEnd
+
+		if currentTime >= startTime and currentTime <= endTime then
+            value = true
+            break
+        end
+	end
+	return value
 end
 
 local function isAuthorised(playerId, door, lockpick)
@@ -370,4 +393,27 @@ lib.addCommand('doorlock', {
 	restricted = Config.CommandPrincipal
 }, function(source, args)
 	TriggerClientEvent('ox_doorlock:triggeredCommand', source, args.closest)
+end)
+
+local function closeDoor(door)
+	if door.onClose then return end
+	CreateThread(function()
+		door.onClose = true
+		print('5 mins passed')
+		setDoorState(door.id, 1, false)
+		door.onClose = nil
+	end)
+end
+
+CreateThread(function()
+	while true do
+		for _, door in pairs(doors) do
+			if door.state == 0 and door.time then
+				if not CheckTime(door.time) then
+					closeDoor(door)
+				end
+			end
+		end
+		Wait(1000)
+	end
 end)
