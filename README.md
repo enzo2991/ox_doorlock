@@ -12,9 +12,10 @@ _The UI needs to be built - use the [latest release](https://github.com/overexte
 Doors are stored in a database for ease-of-use and to allow data to be easily cleared or shared.
 
 mysql-async is no longer supported.
-  - does not support error-catching (pcall)
-  - people use older versions which do not support parameters as arrays
-  - it isn't maintained and has issues that will never be resolved
+
+- does not support error-catching (pcall)
+- people use older versions which do not support parameters as arrays
+- it isn't maintained and has issues that will never be resolved
 
 ### [ox_lib](https://github.com/overextended/ox_lib) (v2.3.0 or higher)
 
@@ -33,8 +34,8 @@ Adding any arguments after the command will open the closest door to you, to eas
 
 ## Conversion
 
-Placing nui_doorlock config files into the `convert` folder will convert the data and insert it into the database.  
-Success is _not_ guaranteed if using a fork on nui_doorlock, like the qb version.
+Placing nui*doorlock config files into the `convert` folder will convert the data and insert it into the database.  
+Success is \_not* guaranteed if using a fork on nui_doorlock, like the qb version.
 
 ## Client API
 
@@ -119,6 +120,11 @@ end)
   - Name of the item.
 - Metadata type
   - Requires metadata support (i.e. ox_inventory) to check slot.metadata.type
+
+### Time
+
+- Start and end time
+  - Start and end times for opening the door
 
 ### Lockpick
 
