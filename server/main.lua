@@ -265,7 +265,7 @@ local function isAuthorised(playerId, door, lockpick)
 			authorised = door.passcode == lib.callback.await('ox_doorlock:inputPassCode', playerId)
 		end
 
-		if authorised ~= nil and door.time then
+		if authorised ~= nil and #door.time > 0 then
 			authorised = CheckTime(door.time) or nil
 		end
 	end
@@ -408,7 +408,7 @@ end
 CreateThread(function()
 	while true do
 		for _, door in pairs(doors) do
-			if door.state == 0 and door.time then
+			if door.state == 0 and #door.time > 0 then
 				if not CheckTime(door.time) then
 					closeDoor(door)
 				end
