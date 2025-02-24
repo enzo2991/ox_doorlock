@@ -70,6 +70,23 @@ const Submit: React.FC = () => {
     } // @ts-ignore
     else data.groups = null;
 
+    if (data.time && data.time.length > 0) {
+      const timeArray: { start: string , end:string}[] = [];
+
+      for(let i = 0; i < data.time.length; i++) {
+        const timeField = data.time[i];
+        if (timeField.start && timeField.end) {
+          timeArray.push({
+              start: timeField.start,
+              end: timeField.end
+          });
+        }
+      }
+      // @ts-ignore
+      data.time = timeArray.length > 0 ? timeArray : null;;
+    } // @ts-ignore
+    else data.time = null;
+
     if (data.lockpickDifficulty && data.lockpickDifficulty.length > 0) {
       const lockpickArr = [];
       for (let i = 0; i < data.lockpickDifficulty.length; i++) {

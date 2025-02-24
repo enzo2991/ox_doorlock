@@ -33,14 +33,14 @@ const TimeFields: React.FC = () => {
         >
           <TextInput
             sx={{ width: '100%' }}
-            placeholder="start"
+            placeholder="00:00"
             value={field.start as string}
             error={!isValidTime(field.start || '') && 'Invalid time format (00:00)'}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e.target.value, index, 'start')}
           />
           <TextInput
             sx={{ width: '100%' }}
-            placeholder="end"
+            placeholder="00:00"
             value={field.end as string}
             error={!isValidTime(field.end || '') && 'Invalid time format (00:00)'}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e.target.value, index, 'end')}
