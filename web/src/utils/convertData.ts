@@ -1,5 +1,5 @@
 import { DoorColumn } from '../store/doors';
-import { StoreState } from '../store';
+import { StoreState, StringField } from '../store';
 
 // Converts groups data into array format
 export const convertData = (data: DoorColumn) => {
@@ -11,11 +11,19 @@ export const convertData = (data: DoorColumn) => {
       newGroupsData[i] = { name: groupObj[0], grade: groupObj[1] };
     }
   }
+
+  let newTimeData: { start: StringField; end: StringField }[] = [];
+  if (data.time && Array.isArray(data.time)) {
+    newTimeData = data.time;
+  } else {
+    newTimeData = []; // ✅ Valeur par défaut si `time` est incorrect
+  }
   return {
     ...data,
     characters: data.characters || [''],
     groups: [...newGroupsData],
     items: data.items || [{ name: '', metadata: '', remove: false }],
     lockpickDifficulty: data.lockpickDifficulty || [''],
+    time:newTimeData,
   } as StoreState;
 };
